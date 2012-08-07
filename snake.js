@@ -1,21 +1,19 @@
-function BodyPart(xpos,ypos) {
+function BodyPart(xpos,ypos,direction) {
 	this.xPos=xpos;
 	this.yPos=ypos;
-	this.direction;
+	this.direction=direction;;
 };
 
 function Snake(startX,startY) {
 	var moveStep = 8;
-	var bodyParts = [new BodyPart(startX,startY)];
-	var direction = 'right';
+	var bodyParts = [new BodyPart(startX,startY,'right')];
 	
 	this.eatFood = function() {
 		bodyParts.push(getNewTail());
 	};
 	
 	this.move = function(newDirection) {
-		direction = newDirection;
-		var newHead = getNewHead();
+		var newHead = getNewHead(newDirection);
 		for(var i = bodyParts.length-1; i>0 ;i--){
 			bodyParts[i] = bodyParts[i-1];
 		}
@@ -34,33 +32,34 @@ function Snake(startX,startY) {
 		return false;
 	};
 	
-	var getNewHead = function(){
+	var getNewHead = function(direction){
 		var currentHead = bodyParts[0];
 		
 		switch(direction){
 			case 'right':
-				return new BodyPart(currentHead.xPos+moveStep,currentHead.yPos);
+				return new BodyPart(currentHead.xPos+moveStep,currentHead.yPos,direction);
 			case 'left':
-				return new BodyPart(currentHead.xPos-moveStep,currentHead.yPos);
+				return new BodyPart(currentHead.xPos-moveStep,currentHead.yPos,direction);
 			case 'up':
-				return new BodyPart(currentHead.xPos,currentHead.yPos-moveStep);
+				return new BodyPart(currentHead.xPos,currentHead.yPos-moveStep,direction);
 			case 'down':
-				return new BodyPart(currentHead.xPos,currentHead.yPos+moveStep);
+				return new BodyPart(currentHead.xPos,currentHead.yPos+moveStep,direction);
 		};
 	};
 	
 	var getNewTail = function(){
 		var currentTail = bodyParts[bodyParts.length-1];
+		var tailDirection = currentTail.direction;
 		
-		switch(direction){
+		switch(tailDirection){
 			case 'right':
-				return new BodyPart(currentTail.xPos-moveStep,currentTail.yPos);
+				return new BodyPart(currentTail.xPos-moveStep,currentTail.yPos,tailDirection);
 			case 'left':
-				return new BodyPart(currentTail.xPos+moveStep,currentTail.yPos);
+				return new BodyPart(currentTail.xPos+moveStep,currentTail.yPos,tailDirection);
 			case 'up':
-				return new BodyPart(currentTail.xPos,currentTail.yPos+moveStep);
+				return new BodyPart(currentTail.xPos,currentTail.yPos+moveStep,tailDirection);
 			case 'down':
-				return new BodyPart(currentTail.xPos,currentTail.yPos-moveStep);
+				return new BodyPart(currentTail.xPos,currentTail.yPos-moveStep,tailDirection);
 		};
 	};
 };

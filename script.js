@@ -1,7 +1,7 @@
 var snake;
 var moveDirection = 'right';
 var gameExecutor;
-var gameSpeed= 50;
+var gameSpeed=100;
 
 //actual field size(400px) divided by corresponding bodypart size(8px)
 var gameFieldRelativeWidth = 50;
@@ -45,17 +45,28 @@ function keyPressedHandler(e) {
 		case 32:
 			startGame();
 			break;
+		case 27:
+			endGame();
+			break;
 	}
  }
 
 function startGame() {
 	moveDirection = 'right';
-	if(gameExecutor)
-		clearInterval(gameExecutor);
+	endGame();
 	
 	snake = new Snake(80,80);
 	drawSnake();
 	gameExecutor = setInterval(move,gameSpeed);
+};
+function endGame() {
+	if(gameExecutor)
+		clearInterval(gameExecutor);
+	
+	//reset UI
+	$('div.bodypart').remove();
+	$('.food').remove();
+	$('#score').html('0');
 };
 
 function drawSnake() {
@@ -97,4 +108,4 @@ function eatFood() {
 	$currentScore = Number($('#score').html());
 	$currentScore++;
 	$('#score').html($currentScore);
-}
+};
