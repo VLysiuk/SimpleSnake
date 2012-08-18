@@ -1,3 +1,4 @@
+var gameBoard;
 var snake;
 var moveDirection = 'right';
 var gameExecutor;
@@ -7,6 +8,7 @@ var gameSpeed=100;
 var gameFieldRelativeWidth = 50;
 var gameFieldRelativeHeight = 50;
 
+//width and height of snake body element
 var snakeElementWidth = 8;
 var snakeElementHeight = 8;
 
@@ -52,6 +54,7 @@ function keyPressedHandler(e) {
  }
 
 function startGame() {
+	gameBoard = new GameBoard();
 	moveDirection = 'right';
 	endGame();
 	
@@ -63,49 +66,35 @@ function endGame() {
 	if(gameExecutor)
 		clearInterval(gameExecutor);
 	
-	//reset UI
-	$('div.bodypart').remove();
-	$('.food').remove();
-	$('#score').html('0');
+	gameBoard.clearBoard();
 };
 
 function drawSnake() {
-	//clear field
-	$('div.bodypart').remove();
+	gameBoard.removeSnakeBody();
 	
 	//draw the new snake
 	var snakeBody = snake.getBody();
 	
 	for(var i=0; i<snakeBody.length; i++){
-		drawElement('bodypart',snakeBody[i].xPos,snakeBody[i].yPos);
+		gameBoard.drawElement('bodypart',snakeBody[i].xPos,snakeBody[i].yPos);
 	}
 };
 
 function generateFood() {
-	//if there is no food ->generate
-	if($('.food').length == 0){
+	if(gameBoard.hasNoCreatedFood()){
 		do{
 			xpos = Math.floor(Math.random() * gameFieldRelativeWidth) * snakeElementWidth;
 			ypos = Math.floor(Math.random() * gameFieldRelativeHeight)* snakeElementHeight;
 		}
 		while(snake.holdsPosition(xpos,ypos));
 		food = {xPos:xpos,yPos:ypos};
-		drawElement('food',xpos,ypos);
+		gameBoard.drawElement('food',xpos,ypos);
 	}
-};
-
-function drawElement(classname, xpos,ypos) {
-	var $element = $('<div/>').addClass(classname);
-	$element.css('top',ypos+'px').css('left',xpos+'px');
-	$('#gameField').append($element);
 };
 
 function eatFood() {
 	snake.eatFood();
-	$('.food').remove();
+	gameBoard.removeSnakeFood();
 	
-	//update score
-	$currentScore = Number($('#score').html());
-	$currentScore++;
-	$('#score').html($currentScore);
+	gameBoard.updateScore();
 };
