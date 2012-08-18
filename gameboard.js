@@ -10,6 +10,7 @@ function GameBoard() {
 		$('div.bodypart').remove();
 		$('.food').remove();
 		$('#score').html('0');
+		$('#loseMsg').css('visibility','hidden');
 	};
 	
 	this.hasNoCreatedFood = function() {
@@ -28,6 +29,10 @@ function GameBoard() {
 		var $currentScore = Number($('#score').html());
 		$currentScore++;
 		$('#score').html($currentScore);
+	};
+	
+	this.showLoseMessage = function(){
+		$('#loseMsg').css('visibility','visible');
 	};
 }
 

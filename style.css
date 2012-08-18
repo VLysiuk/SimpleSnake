@@ -39,7 +39,7 @@
 
 #points {
 	margin:5px;
-	height:200px;
+	height:120px;
 	margin-top:15px
 }
 
@@ -53,4 +53,11 @@
 	width: 8px;
 	position:absolute;
 	background: green;
+}
+
+#gamemsg {
+	font-size:16pt;
+	margin-bottom:35px;
+	visibility:hidden;
+	color:#E01B6A;
 }

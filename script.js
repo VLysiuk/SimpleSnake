@@ -67,6 +67,7 @@ function startGame() {
 	endGame();
 	
 	snake = new Snake(80,80);
+	snake.onCrash(snakeCrashHandler,{xPos:400,yPos:400});
 	drawSnake();
 	gameExecutor = setInterval(move,gameSpeed);
 };
@@ -105,4 +106,9 @@ function eatFood() {
 	gameBoard.removeSnakeFood();
 	
 	gameBoard.updateScore();
+};
+
+function snakeCrashHandler() {
+	endGame();
+	gameBoard.showLoseMessage();
 };

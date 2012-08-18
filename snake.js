@@ -7,6 +7,9 @@ function BodyPart(xpos,ypos,direction) {
 function Snake(startX,startY) {
 	var moveStep = 8;
 	var bodyParts = [new BodyPart(startX,startY,'right')];
+	var gameRegion;
+	var onCrashCallback;
+	var self = this;
 	
 	this.eatFood = function() {
 		bodyParts.push(getNewTail());
@@ -14,6 +17,10 @@ function Snake(startX,startY) {
 	
 	this.move = function(newDirection) {
 		var newHead = getNewHead(newDirection);
+		
+		if(crash(newHead))
+			onCrashCallback();
+			
 		for(var i = bodyParts.length-1; i>0 ;i--){
 			bodyParts[i] = bodyParts[i-1];
 		}
@@ -30,6 +37,11 @@ function Snake(startX,startY) {
 				return true;
 		}
 		return false;
+	};
+	
+	this.onCrash = function(crashCallback,fieldSize) {
+		gameRegion = fieldSize;
+		onCrashCallback = crashCallback;
 	};
 	
 	var getNewHead = function(direction){
@@ -61,5 +73,16 @@ function Snake(startX,startY) {
 			case 'down':
 				return new BodyPart(currentTail.xPos,currentTail.yPos-moveStep,tailDirection);
 		};
+	};
+	
+	var crash = function(head){
+		if(head.xPos >= gameRegion.xPos
+			|| head.yPos >= gameRegion.yPos
+			|| head.xPos < 0
+			|| head.yPos < 0
+			|| self.holdsPosition(head.xPos,head.yPos))
+			return true;
+		
+		return false;
 	};
 };
