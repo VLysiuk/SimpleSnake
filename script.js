@@ -12,6 +12,14 @@ var gameFieldRelativeHeight = 50;
 var snakeElementWidth = 8;
 var snakeElementHeight = 8;
 
+//game keys
+var ESC = 27;
+var SPACE = 32;
+var LEFT_ARROW = 37;
+var UP_ARROW = 38;
+var RIGHT_ARROW = 39;
+var DOWN_ARROW = 40;
+
 var food;
 
 $(document).ready(function() {
@@ -32,22 +40,22 @@ function keyPressedHandler(e) {
 	var code = (e.keyCode ? e.keyCode : e.which);
 	
 	switch(code) {
-		case 37:
+		case LEFT_ARROW:
 			moveDirection = 'left';
 			break;
-		case 38:
+		case UP_ARROW:
 			moveDirection = 'up';
 			break;
-		case 39:
+		case RIGHT_ARROW:
 			moveDirection = 'right';
 			break;
-		case 40:
+		case DOWN_ARROW:
 			moveDirection = 'down';
 			break;
-		case 32:
+		case SPACE:
 			startGame();
 			break;
-		case 27:
+		case ESC:
 			endGame();
 			break;
 	}
