@@ -3,6 +3,10 @@ var snake;
 var moveDirection = 'right';
 var gameExecutor;
 var gameSpeed=100;
+var roundNum = 1;
+
+var eatenItemsCount =0;
+var MAX_FOOD_ITEMS = 12;
 
 //actual field size(400px) divided by corresponding bodypart size(8px)
 var gameFieldRelativeWidth = 50;
@@ -64,7 +68,11 @@ function keyPressedHandler(e) {
 function startGame() {
 	gameBoard = new GameBoard();
 	moveDirection = 'right';
+	eatenItemsCount = 0;
+	roundNum = 1;
+	gameSpeed=100;
 	endGame();
+	gameBoard.clearGameInfo();
 	
 	snake = new Snake(80,80);
 	snake.onCrash(snakeCrashHandler,{xPos:400,yPos:400});
@@ -105,10 +113,23 @@ function eatFood() {
 	snake.eatFood();
 	gameBoard.removeSnakeFood();
 	
-	gameBoard.updateScore();
+	eatenItemsCount++;
+	if(eatenItemsCount >= MAX_FOOD_ITEMS)
+		startNextRound();
+	
+	gameBoard.updateScore(roundNum);
 };
 
 function snakeCrashHandler() {
 	endGame();
 	gameBoard.showLoseMessage();
+};
+
+function startNextRound() {
+	roundNum++;
+	eatenItemsCount = 0;
+	gameBoard.showNextRoundMsg();
+	gameSpeed = Math.floor(gameSpeed * 0.8);
+	clearInterval(gameExecutor);
+	gameExecutor = setInterval(move,gameSpeed);
 };
