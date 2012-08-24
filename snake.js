@@ -7,6 +7,7 @@ function BodyPart(xpos,ypos,direction) {
 function Snake(startX,startY) {
 	var moveStep = 8;
 	var bodyParts = [new BodyPart(startX,startY,'right')];
+	var reverseDirections = {'right':'left','left':'right','up':'down','down':'up'};
 	var gameRegion;
 	var onCrashCallback;
 	var self = this;
@@ -16,15 +17,19 @@ function Snake(startX,startY) {
 	};
 	
 	this.move = function(newDirection) {
+		if(isReverseDirection(newDirection))
+			reverseBodyMove();
+			
 		var newHead = getNewHead(newDirection);
 		
 		if(crash(newHead))
 			onCrashCallback();
-			
-		for(var i = bodyParts.length-1; i>0 ;i--){
-			bodyParts[i] = bodyParts[i-1];
+		else{		
+			for(var i = bodyParts.length-1; i>0 ;i--){
+				bodyParts[i] = bodyParts[i-1];
+			}
+			bodyParts[0] = newHead;
 		}
-		bodyParts[0] = newHead;
 	};
 	
 	this.getBody = function() {
@@ -84,5 +89,24 @@ function Snake(startX,startY) {
 			return true;
 		
 		return false;
+	};
+	
+	var isReverseDirection = function(newDirection) {
+		var currentHeadDirection = bodyParts[0].direction;
+		return newDirection == reverseDirections[currentHeadDirection];
+	};
+	
+	var reverseBodyMove = function() {
+		var tmpBodyPart;
+		var halfBodyLength = Math.floor(bodyParts.length/2);
+		var bodyLength = bodyParts.length -1;
+		
+		for(var i = 0; i< halfBodyLength; i++){
+			tmpBodyPart = bodyParts[i];
+			bodyParts[i] = bodyParts[bodyLength - i];
+			bodyParts[bodyLength - i] = tmpBodyPart;
+			bodyParts[i].direction = reverseDirections[bodyParts[i].direction];
+			bodyParts[bodyLength - i].direction = reverseDirections[bodyParts[bodyLength - i]];
+		}
 	};
 };
